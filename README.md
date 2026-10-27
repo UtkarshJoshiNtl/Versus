@@ -31,7 +31,11 @@ Linux and macOS.
 
 ### Windows
 
-Install the MinGW-w64 compiler (for example through MSYS2), then run:
+The easiest option is to download the prebuilt `versus_gui.exe` or
+`versus.exe` from the [Releases page](https://github.com/UtkarshJoshiNtl/Versus/releases).
+
+To build from source, install the MinGW-w64 compiler (for example through
+MSYS2), then run:
 
 ```bat
 build.bat
