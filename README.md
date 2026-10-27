@@ -1,8 +1,6 @@
-# Spatial indexing comparison
+# Versus
 
-This is my C project for a data structures class. It compares several ways to
-find nearby pairs of moving objects. The same starting scene is shown in two
-panels, with a different spatial data structure selected for each one.
+This project compares several ways to find nearby pairs of moving objects. The same starting scene is shown in two panels, with a different spatial data structure selected for each one.
 
 Each panel advances independently. A faster engine can complete more simulation
 steps while the slower one is still working, which makes the difference easy to
@@ -39,7 +37,7 @@ Install the MinGW-w64 compiler (for example through MSYS2), then run:
 build.bat
 ```
 
-This creates `astro_gui.exe` for opening the visual directly and `astro.exe`
+This creates `versus_gui.exe` for opening the visual directly and `versus.exe`
 for running the visual or command-line benchmark.
 
 ### Linux or macOS
@@ -48,7 +46,7 @@ Install a C11 compiler and SDL2 development files, then run:
 
 ```sh
 make
-./astro
+./versus
 ```
 
 The SDL2_ttf library is optional. Without it, the program uses its built-in
@@ -76,13 +74,13 @@ for each scenario and reports screening time and whether their conjunction and
 collision results agree:
 
 ```sh
-./astro --bench --steps 300
-./astro --bench --steps 500 --engine-left kd --engine-right brute
+./versus --bench --steps 300
+./versus --bench --steps 500 --engine-left kd --engine-right brute
 ```
 
 Available engine IDs are `kd`, `brute`, `grid`, `octree`, and `bvh`. To select a
 single scenario, add `--scene` followed by its ID, such as `--scene debris-field`.
-Use `./astro --list-scenes` to see the available scenarios.
+Use `./versus --list-scenes` to see the available scenarios.
 
 The benchmark is useful for comparing measured work under the same step count.
 Small scenes can favor brute force because it has little setup overhead. Larger

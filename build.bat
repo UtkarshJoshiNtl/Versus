@@ -1,9 +1,9 @@
 @echo off
 setlocal enabledelayedexpansion
-title Astrosis-C build
+title Versus build
 
 echo ================================================
-echo  Astrosis-C - Windows build (native Win32 UI)
+echo  Versus - Windows build (native Win32 UI)
 echo ================================================
 echo.
 
@@ -36,8 +36,8 @@ set CFLAGS=-std=c11 -O2 -Wall -Wextra -Iinclude
 set SRCS=src\catalog.c src\physics.c src\kd_tree.c src\brute_force.c src\engine.c src\grid.c src\octree.c src\bvh.c src\scenes.c src\sim.c src\win32_ui.c src\main.c
 set LIBS=-lcomctl32 -lgdi32 -luser32 -lm
 
-echo [1/2] astro.exe      (console: GUI + --bench) ...
-gcc %CFLAGS% %SRCS% -o astro.exe %LIBS%
+echo [1/2] versus.exe      (console: GUI + --bench) ...
+gcc %CFLAGS% %SRCS% -o versus.exe %LIBS%
 if errorlevel 1 (
   echo.
   echo [ERROR] Build failed - see the compiler messages above.
@@ -46,8 +46,8 @@ if errorlevel 1 (
   exit /b 1
 )
 
-echo [2/2] astro_gui.exe  (windowed: no console window) ...
-gcc %CFLAGS% %SRCS% -o astro_gui.exe -mwindows %LIBS%
+echo [2/2] versus_gui.exe  (windowed: no console window) ...
+gcc %CFLAGS% %SRCS% -o versus_gui.exe -mwindows %LIBS%
 if errorlevel 1 (
   echo.
   echo [ERROR] Build failed - see the compiler messages above.
@@ -58,10 +58,10 @@ if errorlevel 1 (
 
 echo.
 echo Done.
-echo   astro_gui.exe          -> double-click, pure GUI window
-echo   astro.exe              -> same GUI + --bench table in the console
-echo   astro.exe --scene kessler
-echo   astro.exe --bench --steps 300
+echo   versus_gui.exe          -> double-click, pure GUI window
+echo   versus.exe              -> same GUI + --bench table in the console
+echo   versus.exe --scene kessler
+echo   versus.exe --bench --steps 300
 echo.
 pause
 endlocal

@@ -1,5 +1,5 @@
 /*
- * astro.h - shared geometry + object types for Astrosis-C
+ * versus.h - shared geometry + object types for Versus
  *
  * Pure C11. No platform headers here so this can be included anywhere
  * (Linux, MSVC, MinGW). Everything is double precision; positions live in

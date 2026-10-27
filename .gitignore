@@ -1,7 +1,7 @@
 # build outputs
-astro
-astro.exe
-astro_gui.exe
+versus
+versus.exe
+versus_gui.exe
 obj/
 
 # Windows ADS marker files (never useful in git)

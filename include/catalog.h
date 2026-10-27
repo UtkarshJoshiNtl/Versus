@@ -10,7 +10,7 @@
 #ifndef CATALOG_H
 #define CATALOG_H
 
-#include "astro.h"
+#include "versus.h"
 
 typedef struct CatalogNode {
     Object             *obj;

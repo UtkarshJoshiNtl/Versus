@@ -1,4 +1,4 @@
-/* main.c - Astrosis-C driver: visual comparison + headless benchmark */
+/* main.c - Versus driver: visual comparison + headless benchmark */
 #include "scenes.h"
 #include "sim.h"
 #include "gui.h"
@@ -13,7 +13,7 @@ static int streq(const char *a, const char *b) { return strcmp(a, b) == 0; }
 static void usage(const char *prog)
 {
     printf(
-        "ASTROSIS-C - spatial indexing & conjunction screening battles\n"
+        "Versus - spatial indexing & conjunction screening\n"
         "usage: %s [options]\n"
         "  --scene <id|index>   scenario to run (default: debris-field)\n"
         "  --list-scenes        print scenarios and exit\n"
@@ -86,7 +86,7 @@ static int run_bench(const Scene *only, double mu, double dt, double thr,
                      int have_thr, unsigned long seed, size_t steps,
                      EngineType el, EngineType er)
 {
-    printf("\nASTROSIS-C benchmark  (same physics, identical pair sets expected)\n"
+    printf("\nVersus benchmark  (same physics, identical pair sets expected)\n"
            "  engines: %s vs %s\n\n",
            engine_type_name(el), engine_type_name(er));
     if (only) {

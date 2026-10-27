@@ -1,8 +1,8 @@
-# Astrosis-C - lightweight spatial indexing & conjunction screening
+# Versus - lightweight spatial indexing & conjunction screening
 #
 # Linux / macOS / MSYS2:  make
-# Run:                    ./astro            (window)
-#                         ./astro --bench    (headless timing table)
+# Run:                    ./versus            (window)
+#                         ./versus --bench    (headless timing table)
 # Debug (ASan/UBSan):     make debug
 
 CC      ?= cc
@@ -30,7 +30,7 @@ SRC := src/catalog.c src/physics.c src/kd_tree.c src/brute_force.c \
        src/engine.c src/grid.c src/octree.c src/bvh.c \
        src/scenes.c src/sim.c src/viz.c src/main.c
 OBJ := $(patsubst src/%.c,obj/%.o,$(SRC))
-BIN := astro
+BIN := versus
 
 .PHONY: all debug run clean
 all: $(BIN)

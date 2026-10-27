@@ -28,7 +28,7 @@ typedef struct {
     KDNode *pool;   /* arena backing all nodes (single allocation) */
 } KDTree;
 
-/* PairCB (the report callback) is shared, see astro.h. */
+/* PairCB (the report callback) is shared, see versus.h. */
 
 KDTree *kd_build(const Catalog *c);
 void    kd_free(KDTree *t);

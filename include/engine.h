@@ -4,7 +4,7 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include "catalog.h"   /* Catalog, Object; PairCB lives in astro.h */
+#include "catalog.h"   /* Catalog, Object; PairCB lives in versus.h */
 
 typedef struct EngineImpl EngineImpl;
 
@@ -12,6 +12,7 @@ typedef struct EngineVTable {
     const char *name;    /* short id for CLI/UI (kd, brute, grid, ...) */
     const char *label;   /* display name */
     const char *cx;      /* complexity hint shown in the panel caption */
+    const char *desc;    /* short description for tooltips */
     EngineImpl *(*build)(const Catalog *c, void *params);
     void        (*free)(EngineImpl *e);
     size_t      (*screen)(EngineImpl *e, const Catalog *c, double threshold, PairCB cb, void *ud);

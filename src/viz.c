@@ -576,7 +576,7 @@ int gui_run(Sim *left, Sim *right, const GuiOptions *opt)
     text_init();
 
     char title[160];
-    snprintf(title, sizeof title, "Astrosis-C   -   %s   (%s vs %s)",
+    snprintf(title, sizeof title, "Versus   -   %s   (%s vs %s)",
              opt->scene_name ? opt->scene_name : "simulation",
              engine_type_name(opt->engine_left), engine_type_name(opt->engine_right));
 

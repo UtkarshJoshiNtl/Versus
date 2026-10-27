@@ -290,6 +290,7 @@ static void update_stats(void)
 
 static void add_tooltip(HWND tool, const char *message)
 {
+    if (!g_hTooltip || !tool || !message) return;
     TOOLINFOA ti;
     memset(&ti, 0, sizeof ti);
     ti.cbSize = sizeof ti;
@@ -298,6 +299,19 @@ static void add_tooltip(HWND tool, const char *message)
     ti.uId = (UINT_PTR)tool;
     ti.lpszText = (LPSTR)message;
     SendMessageA(g_hTooltip, TTM_ADDTOOLA, 0, (LPARAM)&ti);
+}
+
+static void update_tooltip_text(HWND tool, const char *message)
+{
+    if (!g_hTooltip || !tool || !message) return;
+    TOOLINFOA ti;
+    memset(&ti, 0, sizeof ti);
+    ti.cbSize = sizeof ti;
+    ti.uFlags = TTF_IDISHWND | TTF_SUBCLASS;
+    ti.hwnd = GetParent(tool);
+    ti.uId = (UINT_PTR)tool;
+    ti.lpszText = (LPSTR)message;
+    SendMessageA(g_hTooltip, TTM_UPDATETIPTEXTA, 0, (LPARAM)&ti);
 }
 
 static void create_controls(HWND h)
@@ -352,7 +366,7 @@ static void create_controls(HWND h)
             vc->app = &g_app;
             vc->idx = i;
         }
-        g_app.hView[i] = CreateWindowExA(WS_EX_CLIENTEDGE, "AstrosisView", "",
+        g_app.hView[i] = CreateWindowExA(WS_EX_CLIENTEDGE, "VersusView", "",
             WS_CHILD | WS_VISIBLE,
             0, 0, 10, 10, h, NULL, NULL, NULL);
         if (g_app.hView[i] && vc)
@@ -372,10 +386,16 @@ static void create_controls(HWND h)
         add_tooltip(g_app.hRoc,
             "When enabled, objects that collide are removed from the simulation.");
         for (int i = 0; i < 2; i++) {
-            add_tooltip(g_app.hEng[i],
-                "Choose the spatial data structure used by this panel.");
+            const EngineVTable *vt = g_app.sim[i]->eng.vt;
+            if (vt) {
+                char tbuf[256];
+                snprintf(tbuf, sizeof tbuf, "%s (%s)\r\n%s", vt->label, vt->cx ? vt->cx : "", vt->desc ? vt->desc : "");
+                add_tooltip(g_app.hEng[i], tbuf);
+            } else {
+                add_tooltip(g_app.hEng[i], "Choose the spatial data structure used by this panel.");
+            }
             add_tooltip(g_app.hCap[i],
-                "Approximate growth in screening work as the number of objects increases.");
+                "Approximate growth in screening work (big-O) as the number of objects increases.");
             add_tooltip(g_app.hView[i],
                 "Red marks a close conjunction. Yellow marks a collision.");
         }
@@ -466,8 +486,17 @@ static LRESULT CALLBACK MainProc(HWND h, UINT m, WPARAM w, LPARAM l)
             int idx = LOWORD(w) - ID_ENGL;
             if (idx >= 0 && idx < 2) {
                 int sel = (int)SendMessageA(g_app.hEng[idx], CB_GETCURSEL, 0, 0);
-                if (sel >= 0 && sel < ENG_COUNT)
+                if (sel >= 0 && sel < ENG_COUNT) {
                     sim_set_engine(g_app.sim[idx], (EngineType)sel);
+                    const EngineVTable *vt = g_app.sim[idx]->eng.vt;
+                    if (vt && g_hTooltip) {
+                        char tbuf[256];
+                        snprintf(tbuf, sizeof tbuf, "%s (%s)\r\n%s", vt->label, vt->cx ? vt->cx : "", vt->desc ? vt->desc : "");
+                        update_tooltip_text(g_app.hEng[idx], tbuf);
+                    }
+                    update_stats();
+                    InvalidateRect(g_app.hView[idx], NULL, FALSE);
+                }
             }
             return 0;
         }
@@ -527,7 +556,7 @@ int gui_run(Sim *left, Sim *right, const GuiOptions *opt)
     memset(&wc, 0, sizeof wc);
     wc.lpfnWndProc   = MainProc;
     wc.hInstance     = inst;
-    wc.lpszClassName = "AstrosisMainWnd";
+    wc.lpszClassName = "VersusMainWnd";
     wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = (HBRUSH)(COLOR_BTNFACE + 1);
     if (!RegisterClassA(&wc)) { gdi_done(); return 1; }
@@ -537,7 +566,7 @@ int gui_run(Sim *left, Sim *right, const GuiOptions *opt)
     vc.style         = CS_HREDRAW | CS_VREDRAW;
     vc.lpfnWndProc   = ViewProc;
     vc.hInstance     = inst;
-    vc.lpszClassName = "AstrosisView";
+    vc.lpszClassName = "VersusView";
     vc.hCursor       = LoadCursor(NULL, IDC_ARROW);
     vc.hbrBackground = NULL;
     if (!RegisterClassA(&vc)) { gdi_done(); return 1; }
@@ -545,7 +574,7 @@ int gui_run(Sim *left, Sim *right, const GuiOptions *opt)
     RECT r = { 0, 0, 1024, 700 };
     AdjustWindowRect(&r, WS_OVERLAPPEDWINDOW, FALSE);
 
-    HWND h = CreateWindowExA(0, "AstrosisMainWnd",
+    HWND h = CreateWindowExA(0, "VersusMainWnd",
         "",
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, r.right - r.left, r.bottom - r.top,
